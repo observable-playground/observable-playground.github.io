@@ -1,0 +1,1 @@
+{"templateIndex":3,"sharedHashesByProp":{},"data":{"libraryName":"RxJS","exampleName":"interval","exampleCode":"const { chart } = require('rp-api');\nconst { Observable } = require('rxjs/Rx');\n\nObservable\n  .interval(5)\n  .take(10)\n  .subscribe(chart.createObserver());\n"},"path":"rxjs/interval"}
