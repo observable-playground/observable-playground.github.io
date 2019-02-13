@@ -598,7 +598,7 @@ var _utils = __webpack_require__(11);
 
 var _reactHelmet = __webpack_require__(84);
 
-var _browser = __webpack_require__(8);
+var _browser = __webpack_require__(9);
 
 Object.keys(_browser).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -700,18 +700,109 @@ exports.onLoading = onLoading;
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("path");
+"use strict";
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+
+module.exports = function (useSourceMap) {
+  var list = []; // return the list of modules as css string
+
+  list.toString = function toString() {
+    return this.map(function (item) {
+      var content = cssWithMappingToString(item, useSourceMap);
+
+      if (item[2]) {
+        return '@media ' + item[2] + '{' + content + '}';
+      } else {
+        return content;
+      }
+    }).join('');
+  }; // import a list of modules into the list
+
+
+  list.i = function (modules, mediaQuery) {
+    if (typeof modules === 'string') {
+      modules = [[null, modules, '']];
+    }
+
+    var alreadyImportedModules = {};
+
+    for (var i = 0; i < this.length; i++) {
+      var id = this[i][0];
+
+      if (id != null) {
+        alreadyImportedModules[id] = true;
+      }
+    }
+
+    for (i = 0; i < modules.length; i++) {
+      var item = modules[i]; // skip already imported module
+      // this implementation is not 100% perfect for weird media query combinations
+      // when a module is imported multiple times with different media queries.
+      // I hope this will never occur (Hey this way we have smaller bundles)
+
+      if (item[0] == null || !alreadyImportedModules[item[0]]) {
+        if (mediaQuery && !item[2]) {
+          item[2] = mediaQuery;
+        } else if (mediaQuery) {
+          item[2] = '(' + item[2] + ') and (' + mediaQuery + ')';
+        }
+
+        list.push(item);
+      }
+    }
+  };
+
+  return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+  var content = item[1] || '';
+  var cssMapping = item[3];
+
+  if (!cssMapping) {
+    return content;
+  }
+
+  if (useSourceMap && typeof btoa === 'function') {
+    var sourceMapping = toComment(cssMapping);
+    var sourceURLs = cssMapping.sources.map(function (source) {
+      return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */';
+    });
+    return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+  }
+
+  return [content].join('\n');
+} // Adapted from convert-source-map (MIT)
+
+
+function toComment(sourceMap) {
+  // eslint-disable-next-line no-undef
+  var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+  var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+  return '/*# ' + data + ' */';
+}
 
 /***/ }),
 /* 7 */
 /***/ (function(module, exports) {
 
-module.exports = require("babel-plugin-universal-import/universalImport");
+module.exports = require("path");
 
 /***/ }),
 /* 8 */
+/***/ (function(module, exports) {
+
+module.exports = require("babel-plugin-universal-import/universalImport");
+
+/***/ }),
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1494,97 +1585,6 @@ function getCurrentRoutePath() {
 
 ;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)(module)))
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/*
-  MIT License http://www.opensource.org/licenses/mit-license.php
-  Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-
-module.exports = function (useSourceMap) {
-  var list = []; // return the list of modules as css string
-
-  list.toString = function toString() {
-    return this.map(function (item) {
-      var content = cssWithMappingToString(item, useSourceMap);
-
-      if (item[2]) {
-        return '@media ' + item[2] + '{' + content + '}';
-      } else {
-        return content;
-      }
-    }).join('');
-  }; // import a list of modules into the list
-
-
-  list.i = function (modules, mediaQuery) {
-    if (typeof modules === 'string') {
-      modules = [[null, modules, '']];
-    }
-
-    var alreadyImportedModules = {};
-
-    for (var i = 0; i < this.length; i++) {
-      var id = this[i][0];
-
-      if (id != null) {
-        alreadyImportedModules[id] = true;
-      }
-    }
-
-    for (i = 0; i < modules.length; i++) {
-      var item = modules[i]; // skip already imported module
-      // this implementation is not 100% perfect for weird media query combinations
-      // when a module is imported multiple times with different media queries.
-      // I hope this will never occur (Hey this way we have smaller bundles)
-
-      if (item[0] == null || !alreadyImportedModules[item[0]]) {
-        if (mediaQuery && !item[2]) {
-          item[2] = mediaQuery;
-        } else if (mediaQuery) {
-          item[2] = '(' + item[2] + ') and (' + mediaQuery + ')';
-        }
-
-        list.push(item);
-      }
-    }
-  };
-
-  return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-  var content = item[1] || '';
-  var cssMapping = item[3];
-
-  if (!cssMapping) {
-    return content;
-  }
-
-  if (useSourceMap && typeof btoa === 'function') {
-    var sourceMapping = toComment(cssMapping);
-    var sourceURLs = cssMapping.sources.map(function (source) {
-      return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */';
-    });
-    return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-  }
-
-  return [content].join('\n');
-} // Adapted from convert-source-map (MIT)
-
-
-function toComment(sourceMap) {
-  // eslint-disable-next-line no-undef
-  var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-  var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-  return '/*# ' + data + ' */';
-}
 
 /***/ }),
 /* 10 */
@@ -2769,7 +2769,7 @@ module.exports = {"b":"0.2.0","a":{"@reach/router":"^1.2.1","brace":"^0.11.1","d
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PlaygroundWrapper; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-var PlaygroundWrapper=function PlaygroundWrapper(props){if(typeof document!=='undefined'){var _require=__webpack_require__(102),Playground=_require.Playground;return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Playground,props);}else{return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("code",null,props.code);}};
+var PlaygroundWrapper=function PlaygroundWrapper(props){if(typeof document!=='undefined'){var _require=__webpack_require__(103),Playground=_require.Playground;return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Playground,props);}else{return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("code",null,props.code);}};
 
 /***/ }),
 /* 19 */
@@ -3443,9 +3443,9 @@ function onVisible(element, callback) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(__dirname) {/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
+/* WEBPACK VAR INJECTION */(function(__dirname) {/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var babel_plugin_universal_import_universalImport__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
+/* harmony import */ var babel_plugin_universal_import_universalImport__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
 /* harmony import */ var babel_plugin_universal_import_universalImport__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(babel_plugin_universal_import_universalImport__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Users_kos_playground_react_static_test_node_modules_react_universal_component_dist_index_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(12);
 /* harmony import */ var _Users_kos_playground_react_static_test_node_modules_react_universal_component_dist_index_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_Users_kos_playground_react_static_test_node_modules_react_universal_component_dist_index_js__WEBPACK_IMPORTED_MODULE_2__);
@@ -3633,7 +3633,7 @@ var _regenerator = _interopRequireDefault(__webpack_require__(10));
 
 var _react = _interopRequireWildcard(__webpack_require__(0));
 
-var _ = __webpack_require__(8);
+var _ = __webpack_require__(9);
 
 var _StaticInfo = __webpack_require__(14);
 
@@ -4184,8 +4184,11 @@ var external_react_default = /*#__PURE__*/__webpack_require__.n(external_react_)
 // EXTERNAL MODULE: /Users/kos/playground/react-static-test/src/Playground/PlaygroundWrapper.js
 var PlaygroundWrapper = __webpack_require__(18);
 
+// EXTERNAL MODULE: /Users/kos/playground/react-static-test/src/pages/index.css
+var pages = __webpack_require__(101);
+
 // CONCATENATED MODULE: /Users/kos/playground/react-static-test/src/pages/index.js
-var pages_ExternalLink=function ExternalLink(_ref){var href=_ref.href,text=_ref.text;return external_react_default.a.createElement("a",{href:href,target:"_blank",rel:"noopener noreferrer"},text||href);};/* harmony default export */ var pages = __webpack_exports__["default"] = (function(){return external_react_default.a.createElement("div",null,external_react_default.a.createElement("div",{className:"PageBlock"},external_react_default.a.createElement("p",null,"Learn ",external_react_default.a.createElement(pages_ExternalLink,{href:'http://reactivex.io/rxjs/',text:'RxJS'})," before deploying to production (for great good, of cource)"),external_react_default.a.createElement("p",null,"This tool is aimed to asist in understanding observables by playing with them. There are some code examples prebuilt for you to start with. Further, you can modify any of them to match your needs. Once a snippet is changed -- resulting output would be recalculated IMMEDIATELY."),external_react_default.a.createElement("div",null,"NOTE: currently there are following limitations:",external_react_default.a.createElement("ul",null,external_react_default.a.createElement("li",null,"- timeline is cut to 1000ms"),external_react_default.a.createElement("li",null,"- Promises are not supported"))),external_react_default.a.createElement("br",null),external_react_default.a.createElement("p",null,"Please, check the source codes of this project at ",external_react_default.a.createElement(pages_ExternalLink,{text:"github",href:"https://github.com/observable-playground/observable-playground"}),"."),external_react_default.a.createElement("p",null,"Your feedback is welcome!"),external_react_default.a.createElement("br",null),external_react_default.a.createElement("p",null,"This tool was inspired by ",external_react_default.a.createElement(pages_ExternalLink,{href:'http://rxmarbles.com/',text:'rxmarbles.com'}),", ",external_react_default.a.createElement(pages_ExternalLink,{href:'https://www.learnrxjs.io',text:'learnrxjs.io'})," and great talks by ",external_react_default.a.createElement(pages_ExternalLink,{href:'http://worrydream.com/',text:'Bret Victor'})),external_react_default.a.createElement("br",null),external_react_default.a.createElement("p",null,"Here's a quick example:")),external_react_default.a.createElement("br",null),external_react_default.a.createElement(PlaygroundWrapper["a" /* PlaygroundWrapper */],{height:"200",code:awesome_rxjs_example}));});
+var pages_ExternalLink=function ExternalLink(_ref){var href=_ref.href,text=_ref.text;return external_react_default.a.createElement("a",{href:href,target:"_blank",rel:"noopener noreferrer"},text||href);};/* harmony default export */ var src_pages = __webpack_exports__["default"] = (function(){return external_react_default.a.createElement("div",{className:"Landing"},external_react_default.a.createElement("div",{className:"PageBlock"},external_react_default.a.createElement("p",null,"Learn ",external_react_default.a.createElement(pages_ExternalLink,{href:'http://reactivex.io/rxjs/',text:'RxJS'})," before deploying to production (for great good, of cource)"),external_react_default.a.createElement("p",null,"This tool is aimed to asist in understanding observables by playing with them. There are some code examples prebuilt for you to start with. Further, you can modify any of them to match your needs. Once a snippet is changed -- resulting output would be recalculated IMMEDIATELY."),external_react_default.a.createElement("div",null,"NOTE: currently there are following limitations:",external_react_default.a.createElement("ul",null,external_react_default.a.createElement("li",null,"- timeline is cut to 1000ms"),external_react_default.a.createElement("li",null,"- Promises are not supported"))),external_react_default.a.createElement("br",null),external_react_default.a.createElement("p",null,"Please, check the source codes of this project at ",external_react_default.a.createElement(pages_ExternalLink,{text:"github",href:"https://github.com/observable-playground/observable-playground"}),"."),external_react_default.a.createElement("p",null,"Your feedback is welcome!"),external_react_default.a.createElement("br",null),external_react_default.a.createElement("p",null,"This tool was inspired by ",external_react_default.a.createElement(pages_ExternalLink,{href:'http://rxmarbles.com/',text:'rxmarbles.com'}),", ",external_react_default.a.createElement(pages_ExternalLink,{href:'https://www.learnrxjs.io',text:'learnrxjs.io'})," and great talks by ",external_react_default.a.createElement(pages_ExternalLink,{href:'http://worrydream.com/',text:'Bret Victor'}))),external_react_default.a.createElement("br",null),external_react_default.a.createElement(PlaygroundWrapper["a" /* PlaygroundWrapper */],{height:"200",code:awesome_rxjs_example}));});
 
 /***/ }),
 /* 45 */
@@ -4257,7 +4260,7 @@ module.exports = __webpack_require__(83);
 
 var plugins = __webpack_require__(25).default;
 
-var _require = __webpack_require__(8),
+var _require = __webpack_require__(9),
     registerPlugins = _require.registerPlugins;
 
 registerPlugins(plugins);
@@ -5444,7 +5447,7 @@ module.exports = require("intersection-observer");
 
 var templates = __webpack_require__(35).default;
 
-var _require = __webpack_require__(8),
+var _require = __webpack_require__(9),
     registerTemplates = _require.registerTemplates;
 
 registerTemplates(templates);
@@ -5878,7 +5881,7 @@ function _extends() {
   return _extends.apply(this, arguments);
 }
 
-var App = __webpack_require__(101).default;
+var App = __webpack_require__(102).default;
 
 var _default = function _default(staticInfo) {
   return function (props) {
@@ -5945,7 +5948,7 @@ var _regenerator = _interopRequireDefault(__webpack_require__(10));
 
 var _react = _interopRequireDefault(__webpack_require__(0));
 
-var _ = __webpack_require__(8);
+var _ = __webpack_require__(9);
 
 var _Spinner = _interopRequireDefault(__webpack_require__(23));
 
@@ -6673,7 +6676,7 @@ var _react = _interopRequireDefault(__webpack_require__(0));
 
 var _utils = __webpack_require__(11);
 
-var _ = __webpack_require__(8);
+var _ = __webpack_require__(9);
 
 var _Visibility = _interopRequireDefault(__webpack_require__(34));
 
@@ -7021,7 +7024,7 @@ var _react = _interopRequireDefault(__webpack_require__(0));
 
 var _router = __webpack_require__(15);
 
-var _ = __webpack_require__(8);
+var _ = __webpack_require__(9);
 
 var _utils = __webpack_require__(11);
 
@@ -7847,7 +7850,7 @@ exports.default = RouterScroller;
 /* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(false);
+exports = module.exports = __webpack_require__(6)(false);
 // Module
 exports.push([module.i, ".Menu {\n  color: #757575; }\n  .Menu__examples {\n    display: block;\n    padding-bottom: 1rem; }\n  .Menu__library-name {\n    padding: 0.25rem 0;\n    display: block;\n    color: #c5c5c5;\n    border-bottom: #c5c5c5 1px solid; }\n  .Menu__library-version {\n    float: right;\n    font-weight: normal;\n    font-size: 0.6rem;\n    border: 1px solid #c5c5c5;\n    padding: 0.2rem;\n    border-radius: 0.1rem; }\n  .Menu__group {\n    padding-bottom: 1rem; }\n    .Menu__group-name {\n      color: #c5c5c5;\n      padding: 0.25rem 0;\n      display: block; }\n  .Menu__item {\n    padding: 0.25rem 0;\n    display: block;\n    display: block;\n    color: #757575;\n    text-decoration: none;\n    white-space: nowrap; }\n    .Menu__item_active {\n      color: #04a9f4; }\n    .Menu__item:hover {\n      color: #04a9f4; }\n", ""]);
 
@@ -7857,12 +7860,12 @@ exports.push([module.i, ".Menu {\n  color: #757575; }\n  .Menu__examples {\n    
 /* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(false);
+exports = module.exports = __webpack_require__(6)(false);
 // Imports
 exports.i(__webpack_require__(93), "");
 
 // Module
-exports.push([module.i, "p {\n  padding: 0.5rem 0; }\n\n.PageBlock {\n  display: block;\n  padding: 1rem;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  background: white;\n  border: 1px solid #f1f1f1;\n  font-family: monospace;\n  font-size: 14px; }\n  .PageBlock a {\n    color: #757575; }\n    .PageBlock a:hover {\n      color: #04a9f4; }\n\nbody {\n  font-family: sans-serif;\n  background: #fafafa;\n  font-size: 16px; }\n\n.App {\n  width: 1060px;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  margin: auto; }\n  .App__header {\n    padding: 1.3rem 0 1rem 10rem; }\n  .App__logo {\n    font-family: sans-serif;\n    color: #757575;\n    text-decoration: none; }\n    .App__logo_main {\n      font-weight: bold; }\n    .App__logo:hover .App__logo_main {\n      color: #04a9f4; }\n  .App__body {\n    display: -ms-flexbox;\n    display: flex;\n    -ms-flex-direction: row-reverse;\n        flex-direction: row-reverse; }\n  .App__menu {\n    -ms-flex: 0 0 auto;\n        flex: 0 0 auto;\n    -ms-flex-preferred-size: 10rem;\n        flex-basis: 10rem;\n    max-width: 10rem;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding-right: 1rem; }\n  .App__footer {\n    padding: 0.5rem;\n    font-size: 0.7rem;\n    text-align: right;\n    color: #c5c5c5; }\n", ""]);
+exports.push([module.i, "p {\n  padding: 0.5rem 0; }\n\n.PageBlock {\n  display: block;\n  padding: 1rem;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  background: white;\n  border: 1px solid #f1f1f1;\n  font-family: monospace;\n  font-size: 14px; }\n  .PageBlock a {\n    color: #757575; }\n    .PageBlock a:hover {\n      color: #04a9f4; }\n\nbody {\n  font-family: sans-serif;\n  background: #fafafa;\n  font-size: 16px; }\n\n.App {\n  width: 1060px;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  margin: auto; }\n  .App__header {\n    padding: 1.3rem 0 1rem 10rem; }\n  .App__logo {\n    font-family: sans-serif;\n    color: #757575;\n    text-decoration: none; }\n    .App__logo_main {\n      font-weight: bold; }\n    .App__logo:hover .App__logo_main {\n      color: #04a9f4; }\n  .App__body {\n    display: -ms-flexbox;\n    display: flex;\n    -ms-flex-direction: row-reverse;\n        flex-direction: row-reverse; }\n  .App__contents {\n    -ms-flex-positive: 1;\n        flex-grow: 1; }\n  .App__menu {\n    -ms-flex: 0 0 auto;\n        flex: 0 0 auto;\n    -ms-flex-preferred-size: 10rem;\n        flex-basis: 10rem;\n    max-width: 10rem;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    padding-right: 1rem; }\n  .App__footer {\n    padding: 0.5rem;\n    font-size: 0.7rem;\n    text-align: right;\n    color: #c5c5c5; }\n", ""]);
 
 
 
@@ -7870,7 +7873,7 @@ exports.push([module.i, "p {\n  padding: 0.5rem 0; }\n\n.PageBlock {\n  display:
 /* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(false);
+exports = module.exports = __webpack_require__(6)(false);
 // Module
 exports.push([module.i, "/* http://meyerweb.com/eric/tools/css/reset/\n   v4.0 | 20180602\n   License: none (public domain)\n*/\n\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmain, menu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n\tmargin: 0;\n\tpadding: 0;\n\tborder: 0;\n\tfont-size: 100%;\n\tfont: inherit;\n\tvertical-align: baseline;\n}\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, main, menu, nav, section {\n\tdisplay: block;\n}\n/* HTML5 hidden-attribute fix for newer browsers */\n*[hidden] {\n    display: none;\n}\nbody {\n\tline-height: 1;\n}\nol, ul {\n\tlist-style: none;\n}\nblockquote, q {\n\tquotes: none;\n}\nblockquote:before, blockquote:after,\nq:before, q:after {\n\tcontent: '';\n\tcontent: none;\n}\ntable {\n\tborder-collapse: collapse;\n\tborder-spacing: 0;\n}\n", ""]);
 
@@ -7880,7 +7883,7 @@ exports.push([module.i, "/* http://meyerweb.com/eric/tools/css/reset/\n   v4.0 |
 /* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(false);
+exports = module.exports = __webpack_require__(6)(false);
 // Module
 exports.push([module.i, ".Playground {\n  display: -ms-flexbox;\n  display: flex;\n  width: 900px; }\n  .Playground__editor {\n    -ms-flex: 0 0 auto;\n        flex: 0 0 auto;\n    -ms-flex-preferred-size: 440px;\n        flex-basis: 440px; }\n  .Playground__chart {\n    -ms-flex: 0 0 auto;\n        flex: 0 0 auto;\n    -ms-flex-preferred-size: 460px;\n        flex-basis: 460px;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box; }\n", ""]);
 
@@ -7974,7 +7977,7 @@ overridies.forEach(function(key){mocks[key]=null;});}return{time:time,status:sta
 /* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(false);
+exports = module.exports = __webpack_require__(6)(false);
 // Module
 exports.push([module.i, ".EditorComponent {\n  min-width: 300px; }\n  .EditorComponent.ace-monokai {\n    border-top: 6px solid #272822; }\n", ""]);
 
@@ -7996,7 +7999,7 @@ module.exports = require("brace/theme/monokai");
 /* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(false);
+exports = module.exports = __webpack_require__(6)(false);
 // Module
 exports.push([module.i, ".ErrorComponent {\n  padding: 1rem;\n  background: #ffaa00;\n  font-family: monospace; }\n", ""]);
 
@@ -8006,7 +8009,7 @@ exports.push([module.i, ".ErrorComponent {\n  padding: 1rem;\n  background: #ffa
 /* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(false);
+exports = module.exports = __webpack_require__(6)(false);
 // Module
 exports.push([module.i, ".TimeLineChartComponent .axis.axis--x line {\n  stroke: #c5c5c5; }\n\n.TimeLineChartComponent .axis.axis--x path {\n  stroke: #c5c5c5; }\n\n.TimeLineChartComponent .axis.axis--x text {\n  fill: #c5c5c5; }\n\n.TimeLineChartComponent .thread line {\n  stroke: #333333;\n  stroke-width: 2px; }\n\n.TimeLineChartComponent .thread .event circle {\n  stroke: #333333;\n  stroke-width: 2px; }\n\n.TimeLineChartComponent .thread .event text {\n  font-size: 14px;\n  font-family: \"Source Sans Pro\", sans-serif;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none; }\n", ""]);
 
@@ -8014,6 +8017,16 @@ exports.push([module.i, ".TimeLineChartComponent .axis.axis--x line {\n  stroke:
 
 /***/ }),
 /* 101 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(6)(false);
+// Module
+exports.push([module.i, ".Landing {\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: column-reverse;\n      flex-direction: column-reverse; }\n", ""]);
+
+
+
+/***/ }),
+/* 102 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8105,7 +8118,7 @@ src_render(react_static_test_src_App);// Hot Module Replacement
 if(false){}}
 
 /***/ }),
-/* 102 */
+/* 103 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8208,4 +8221,4 @@ var fn=Function('require',sourceCode);fn(_require);},MAX_EXECUTION_TIME);execSta
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=static.2492a025.js.map
+//# sourceMappingURL=static.4dbda4c1.js.map
