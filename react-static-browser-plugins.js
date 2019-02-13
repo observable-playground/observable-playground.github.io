@@ -3,7 +3,7 @@
 
 // Plugins
 const plugins = [{
-  location: "/Users/kos/playground/react-static-test",
+  location: "/Users/kos/projects/observable-playground",
   plugins: [],
   hooks: {}
 }]

@@ -1,5 +1,5 @@
 
-import universal, { setHasBabelPlugin } from '/Users/kos/playground/react-static-test/node_modules/react-universal-component/dist/index.js'
+import universal, { setHasBabelPlugin } from '/Users/kos/projects/observable-playground/node_modules/react-universal-component/dist/index.js'
 
 
 setHasBabelPlugin()
@@ -13,9 +13,10 @@ const universalOptions = {
 }
 
 const t_0 = universal(import('../src/pages/404.js'), universalOptions)
-const t_1 = universal(import('../src/pages/index.js'), universalOptions)
-const t_2 = universal(import('../src/containers/Library'), universalOptions)
-const t_3 = universal(import('../src/Playground/PlaygroundContainer'), universalOptions)
+const t_1 = universal(import('../src/pages/gist.js'), universalOptions)
+const t_2 = universal(import('../src/pages/index.js'), universalOptions)
+const t_3 = universal(import('../src/containers/Library'), universalOptions)
+const t_4 = universal(import('../src/Playground/PlaygroundContainer'), universalOptions)
 
 
 // Template Map
@@ -23,5 +24,6 @@ export default [
   t_0,
 t_1,
 t_2,
-t_3
+t_3,
+t_4
 ]
