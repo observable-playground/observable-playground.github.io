@@ -1,0 +1,1 @@
+{"templateIndex":4,"sharedHashesByProp":{},"data":{"libraryName":"Bacon.js","exampleName":"interval","exampleCode":"const { chart } = require('rp-api');\nconst Bacon = require('baconjs');\n\nBacon\n  .interval(5, '+')\n  .take(5)\n  .subscribe(chart.createBaconObserver());\n"},"path":"baconjs/interval"}

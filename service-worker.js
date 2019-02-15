@@ -1,3 +1,5 @@
+// This file should destroy existing service worker that was holding old code
+// details: https://github.com/NekR/self-destroying-sw
 self.addEventListener('install', function(e) {
   self.skipWaiting();
 });
