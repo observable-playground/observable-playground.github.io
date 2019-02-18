@@ -6342,7 +6342,7 @@ var external_react_dom_ = __webpack_require__(22);
 var external_react_dom_default = /*#__PURE__*/__webpack_require__.n(external_react_dom_);
 
 // CONCATENATED MODULE: /Users/kos/projects/observable-playground/src/GA.js
-/* harmony default export */ var GA = (function(){if(false){ var gtag; }});
+/* harmony default export */ var GA = (function(){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','UA-40041298-4');});
 // EXTERNAL MODULE: ../lib/index.js
 var lib = __webpack_require__(3);
 
@@ -6579,4 +6579,4 @@ external_react_default.a.createElement(TimeLineChartComponent_TimeLineChartCompo
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=static.933729b4.js.map
+//# sourceMappingURL=static.e6dbf7b2.js.map
