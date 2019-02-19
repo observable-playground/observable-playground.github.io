@@ -6367,8 +6367,6 @@ var external_react_default = /*#__PURE__*/__webpack_require__.n(external_react_)
 var external_react_dom_ = __webpack_require__(24);
 var external_react_dom_default = /*#__PURE__*/__webpack_require__.n(external_react_dom_);
 
-// CONCATENATED MODULE: /Users/kos/projects/observable-playground/src/GA.js
-/* harmony default export */ var GA = (function(){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','UA-40041298-4');});
 // EXTERNAL MODULE: ../lib/index.js
 var lib = __webpack_require__(3);
 
@@ -6489,8 +6487,7 @@ var App_App=function App(){var isLinkHeaderActive=function isLinkHeaderActive(_r
 // Your top level component
 // Export your top level component as JSX (for static rendering)
 /* harmony default export */ var src = __webpack_exports__["default"] = (observable_playground_src_App);// Render your app
-if(typeof document!=='undefined'){var renderMethod= false?undefined:external_react_dom_default.a.hydrate||external_react_dom_default.a.render;var src_render=function render(Comp){renderMethod(external_react_default.a.createElement(Comp,null),document.getElementById('root'));};// GA
-GA();// Render!
+if(typeof document!=='undefined'){var renderMethod= false?undefined:external_react_dom_default.a.hydrate||external_react_dom_default.a.render;var src_render=function render(Comp){renderMethod(external_react_default.a.createElement(Comp,null),document.getElementById('root'));};// Render!
 src_render(observable_playground_src_App);// Hot Module Replacement
 if(false){}}
 
@@ -6630,4 +6627,4 @@ var fn=Function('require',sourceCode);fn(_require);},MAX_EXECUTION_TIME);execSta
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=static.877fe94c.js.map
+//# sourceMappingURL=static.6efe44a1.js.map
