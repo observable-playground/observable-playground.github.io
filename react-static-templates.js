@@ -15,8 +15,8 @@ const universalOptions = {
 const t_0 = universal(import('../src/pages/404.js'), universalOptions)
 const t_1 = universal(import('../src/pages/gist.js'), universalOptions)
 const t_2 = universal(import('../src/pages/index.js'), universalOptions)
-const t_3 = universal(import('../src/dynamic-pages/Library'), universalOptions)
-const t_4 = universal(import('../src/dynamic-pages/Example'), universalOptions)
+const t_3 = universal(import('../src/Library/Library.page.js'), universalOptions)
+const t_4 = universal(import('../src/Example/Example.page.js'), universalOptions)
 
 
 // Template Map
