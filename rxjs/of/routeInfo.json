@@ -1,1 +1,1 @@
-{"templateIndex":4,"sharedHashesByProp":{},"data":{"libraryName":"RxJS","exampleName":"of","exampleCode":"const { rxObserver } = require('api/v0.3');\nconst { Observable } = require('rxjs/Rx');\n\nObservable\n  .of(1)\n  .subscribe(rxObserver());\n"},"path":"rxjs/of"}
+{"templateIndex":4,"sharedHashesByProp":{},"data":{"libraryName":"RxJS","exampleName":"of","exampleCode":"const { rxObserver } = require('api/v0.3');\nconst { of } = require('rxjs');\n\nof(1)\n  .subscribe(rxObserver());\n"},"path":"rxjs/of"}
