@@ -4299,7 +4299,8 @@ function isNativeReflectConstruct(){if(typeof Reflect==="undefined"||!Reflect.co
  * // > 100
  * // > end
  */ // Get global object, typesafe
-var __window=typeof window!=='undefined'&&window;var __global=typeof global!=='undefined'&&global;var glob=__window||__global;var ONE_MINUTE=1000*60;// Store ref to both mocked and original methods
+var __window=typeof window!=='undefined'&&window;var __global=typeof global!=='undefined'&&global;var glob=__window||__global;var ONE_MINUTE=1000*60;// a randomly picked number, to be honest
+var MAX_TASKS_PER_TICK=1024;// Store ref to both mocked and original methods
 // to switch between while in `.execute` function
 var originals=Object.create(null);var mocks=Object.create(null);var isMockMode=false;var DEBUG_MODE=false;// Methods to override
 var overridies=['Date','setTimeout','clearTimeout','setInterval','clearInterval','setImmediate','clearImmediate','requestAnimationFrame','cancelAnimationFrame'];overridies.filter(function(key){return glob[key]!==undefined;}).forEach(function(key){originals[key]=glob[key];glob[key]=function MockSub(){var mock=mocks[key];var original=originals[key];// Run mocks only in MockMode
@@ -4340,13 +4341,14 @@ var getNextTask=function getNextTask(){return tasks.filter(function(x){return ti
 a.time-b.time// or executed earlier
 ||a.id-b.id;})// or with lesser id
 .shift();};// Runs all delayed code
-var flush=function flush(){while(tasks.length){if(time>=maxLifetime){return"Ran out of time (".concat(maxLifetime,"ms)");}var nextTask=void 0;while(nextTask=getNextTask()){// eslint-disable-line no-cond-assign
-// TODO: [kos] potentially this might lead to an infinite loop.
-//       Add anti-infinite loop guard, like throttling
+var flush=function flush(){while(tasks.length){if(time>=maxLifetime){return"Execution terminated: maximum execution time is ".concat(maxLifetime,"ms");}var tasksPerTickCounter=0;var nextTask=void 0;while(nextTask=getNextTask()){// eslint-disable-line no-cond-assign
+if(DEBUG_MODE){console.log('[>]',nextTask.id);}nextTask.fn();// NOTE: [kos] potentially this loop might be infinite.
+//       Adding anti-infinite guard to limit max tasks run per 1 tick.
+// TODO: [kos] consider adding throttling
 //       https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout#Reasons_for_delays_longer_than_specified
 //       e.g. `timeout = Math.max(4, Number(timeout))`
-if(DEBUG_MODE){console.log('[>]',nextTask.id);}nextTask.fn();}time++;}time--;// [kos] I know, this is dumb, needed to undo last `time++`
-return 0;};var status;var ACTUAL_TIME=new Date(Date.now()).toLocaleTimeString('en-GB');var CONSOLE_GROUP="\u26A1\uFE0F @".concat(ACTUAL_TIME);try{time=0;enableMocks();if(console&&console.group){console.group(CONSOLE_GROUP);}fn();status=flush();}finally{disableMocks();if(console&&console.groupEnd){console.groupEnd(CONSOLE_GROUP);}}return{time:time,status:status};}function enableMocks(){isMockMode=true;}function disableMocks(){isMockMode=false;// cleanup mocks
+tasksPerTickCounter++;if(tasksPerTickCounter>MAX_TASKS_PER_TICK){return"Execution terminated: over ".concat(MAX_TASKS_PER_TICK," tasks were scheduled for a single tick at ").concat(time);}}tasksPerTickCounter=0;time++;}time--;// [kos] I know, this is dumb, needed to undo last `time++`
+return 0;};var status;var ACTUAL_TIME=new Date(Date.now()).toLocaleTimeString('en-GB');var CONSOLE_GROUP="\u26A1\uFE0F @".concat(ACTUAL_TIME);try{time=0;enableMocks();if(console&&console.group){console.group(CONSOLE_GROUP);}fn();status=flush();if(status!==0&&console&&console.warn){console.warn(status);}}finally{disableMocks();if(console&&console.groupEnd){console.groupEnd(CONSOLE_GROUP);}}return{time:time,status:status};}function enableMocks(){isMockMode=true;}function disableMocks(){isMockMode=false;// cleanup mocks
 overridies.forEach(function(key){mocks[key]=null;});}module.exports={execute:execute};
 
 /***/ }),
@@ -6804,4 +6806,4 @@ function Playground_typeof(obj){if(typeof Symbol==="function"&&typeof Symbol.ite
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=static.1025978c.js.map
+//# sourceMappingURL=static.95ef47a2.js.map
