@@ -408,7 +408,7 @@ var external_react_default = /*#__PURE__*/__webpack_require__.n(external_react_)
 var Playground_SSRPlayground = __webpack_require__(79);
 
 // CONCATENATED MODULE: /Users/kos/projects/observable-playground/src/Playground/SSRPlayground.js
-var SSRPlayground_SSRPlayground=function SSRPlayground(props){return external_react_default.a.createElement("div",{className:"SSRPlayground"},external_react_default.a.createElement("pre",{className:"SSRPlayground__Pre"},external_react_default.a.createElement("code",null,props.code)));};
+var SSRPlayground_SSRPlayground=function SSRPlayground(props){return external_react_default.a.createElement("div",{className:"Playground"},external_react_default.a.createElement("div",{className:"Playground__editor"},external_react_default.a.createElement("pre",{className:"SSRPlayground__Pre"},external_react_default.a.createElement("code",null,props.code))),external_react_default.a.createElement("div",{className:"Playground__chart"}));};
 // CONCATENATED MODULE: /Users/kos/projects/observable-playground/src/Playground/PlaygroundWrapper.js
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PlaygroundWrapper_PlaygroundWrapper; });
 var PlaygroundWrapper_PlaygroundWrapper=function PlaygroundWrapper(props){if(typeof document!=='undefined'){var _require=__webpack_require__(90),Playground=_require.Playground;return external_react_default.a.createElement(Playground,props);}else{return external_react_default.a.createElement(SSRPlayground_SSRPlayground,props);}};
@@ -6391,7 +6391,7 @@ exports.push([module.i, "/*! normalize.css v8.0.1 | MIT License | github.com/nec
 
 exports = module.exports = __webpack_require__(10)(false);
 // Module
-exports.push([module.i, ".SSRPlayground {\n  width: 100%;\n  max-width: 100%;\n  overflow: auto;\n  padding: 0 1rem;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  font-size: 0.9rem; }\n  .SSRPlayground__Pre {\n    white-space: pre-wrap; }\n", ""]);
+exports.push([module.i, ".SSRPlayground__Pre {\n  padding: 0 1rem;\n  font-size: 0.9rem;\n  white-space: pre-wrap; }\n", ""]);
 
 
 
@@ -6827,4 +6827,4 @@ function Playground_typeof(obj){if(typeof Symbol==="function"&&typeof Symbol.ite
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=static.ef8e7fe8.js.map
+//# sourceMappingURL=static.8339f3b5.js.map
