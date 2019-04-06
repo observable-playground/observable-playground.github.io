@@ -6527,7 +6527,7 @@ var router_ = __webpack_require__(2);
 // CONCATENATED MODULE: /Users/kos/projects/observable-playground/src/examples/rxjs/combination/forkJoin.js
 /* harmony default export */ var forkJoin = ("const { rxObserver } = require('api/v0.3');\nconst { timer, forkJoin } = require('rxjs');\nconst { mapTo, take } = require('rxjs/operators');\n\n\nconst a$ = timer(10).pipe(mapTo('a'));\nconst b$ = timer(0, 10).pipe(take(3));\n\nconst result$ = forkJoin(a$, b$);\n\na$.subscribe(rxObserver('a$'));\nb$.subscribe(rxObserver('b$'));\nresult$.subscribe(rxObserver('forkJoin(a$, b$)'));");
 // CONCATENATED MODULE: /Users/kos/projects/observable-playground/src/examples/rxjs/combination/combineLatest.js
-/* harmony default export */ var combineLatest = ("const { rxObserver } = require('api/v0.3');\nconst { timer, combineLatest } = require('rxjs');\nconst { take } = require('rxjs/operators');\n\n\nconst a$ = timer(0, 10).pipe(\n    take(5)\n  );\n\nconst b$ = timer(0, 4).pipe(\n    take(7)\n  );\n\nconst result$ = combineLatest(a$, b$);\n\na$.subscribe(rxObserver('a$'));\nb$.subscribe(rxObserver('b$'));\nresult$.subscribe(rxObserver('result$'));\n");
+/* harmony default export */ var combineLatest = ("const { rxObserver } = require('api/v0.3');\nconst { timer, combineLatest } = require('rxjs');\nconst { take } = require('rxjs/operators');\n\n\nconst a$ = timer(0, 10).pipe(\n    take(5)\n  );\n\nconst b$ = timer(0, 4).pipe(\n    take(7)\n  );\n\nconst result$ = combineLatest(a$, b$);\n\na$.subscribe(rxObserver('a$'));\nb$.subscribe(rxObserver('b$'));\nresult$.subscribe(rxObserver('combineLatest(a$, b$)'));\n");
 // CONCATENATED MODULE: /Users/kos/projects/observable-playground/src/examples/rxjs/transformation/filter.js
 /* harmony default export */ var filter = ("const { rxObserver } = require('api/v0.3');\nconst { timer } = require('rxjs');\nconst { filter, take } = require('rxjs/operators');\n\n\nconst source$ = timer(0, 5).pipe(\n    take(4)\n  );\n\nconst result$ = source$.pipe(\n    filter(x => x % 2)\n  );\n\nsource$.subscribe(rxObserver());\nresult$.subscribe(rxObserver());\n");
 // CONCATENATED MODULE: /Users/kos/projects/observable-playground/src/examples/rxjs/transformation/find.js
@@ -6844,4 +6844,4 @@ function Playground_typeof(obj){if(typeof Symbol==="function"&&typeof Symbol.ite
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=static.0733bb10.js.map
+//# sourceMappingURL=static.d1499570.js.map
