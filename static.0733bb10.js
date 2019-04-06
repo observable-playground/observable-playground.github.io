@@ -6525,7 +6525,7 @@ var router_ = __webpack_require__(2);
 // CONCATENATED MODULE: /Users/kos/projects/observable-playground/src/examples/rxjs/combination/zip.js
 /* harmony default export */ var zip = ("const { rxObserver } = require('api/v0.3');\nconst { timer, from } = require('rxjs');\nconst { zip, take } = require('rxjs/operators');\n\n\nconst alphabet = 'abcdefghijklmnopqrstuvwxyz';\nconst alphabet$ = from(alphabet);\n\ntimer(0, 5).pipe(\n    zip(alphabet$, (digit, letter)=>digit+letter),\n    take(10)\n  )\n  .subscribe(rxObserver());\n");
 // CONCATENATED MODULE: /Users/kos/projects/observable-playground/src/examples/rxjs/combination/forkJoin.js
-/* harmony default export */ var forkJoin = ("const { rxObserver } = require('api/v0.3');\nconst { timer, forkJoin } = require('rxjs');\nconst { mapTo } = require('rxjs/operators');\n\n\nconst a$ = timer(10).pipe(mapTo('a'));\nconst b$ = timer(20).pipe(mapTo('b'));\n\nconst result$ = forkJoin(a$, b$);\n\na$.subscribe(rxObserver('a$'));\nb$.subscribe(rxObserver('b$'));\nresult$.subscribe(rxObserver('result$'));\n");
+/* harmony default export */ var forkJoin = ("const { rxObserver } = require('api/v0.3');\nconst { timer, forkJoin } = require('rxjs');\nconst { mapTo, take } = require('rxjs/operators');\n\n\nconst a$ = timer(10).pipe(mapTo('a'));\nconst b$ = timer(0, 10).pipe(take(3));\n\nconst result$ = forkJoin(a$, b$);\n\na$.subscribe(rxObserver('a$'));\nb$.subscribe(rxObserver('b$'));\nresult$.subscribe(rxObserver('forkJoin(a$, b$)'));");
 // CONCATENATED MODULE: /Users/kos/projects/observable-playground/src/examples/rxjs/combination/combineLatest.js
 /* harmony default export */ var combineLatest = ("const { rxObserver } = require('api/v0.3');\nconst { timer, combineLatest } = require('rxjs');\nconst { take } = require('rxjs/operators');\n\n\nconst a$ = timer(0, 10).pipe(\n    take(5)\n  );\n\nconst b$ = timer(0, 4).pipe(\n    take(7)\n  );\n\nconst result$ = combineLatest(a$, b$);\n\na$.subscribe(rxObserver('a$'));\nb$.subscribe(rxObserver('b$'));\nresult$.subscribe(rxObserver('result$'));\n");
 // CONCATENATED MODULE: /Users/kos/projects/observable-playground/src/examples/rxjs/transformation/filter.js
@@ -6844,4 +6844,4 @@ function Playground_typeof(obj){if(typeof Symbol==="function"&&typeof Symbol.ite
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=static.380f2f9b.js.map
+//# sourceMappingURL=static.0733bb10.js.map
